@@ -1690,6 +1690,118 @@
   <div class="loading-text" id="loading-text">Processing…</div>
 </div>
 
+<!-- ══════════════ MODALS ══════════════ -->
+<!-- ══════════════════════════════════════════════════
+     AI TRANSLATOR MODAL — DNA-Powered
+══════════════════════════════════════════════════ -->
+<div id="ai-translator-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(900px,96vw);max-height:88vh;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.4);">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--surface2);border-bottom:1px solid var(--border);flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1.2rem;">🧬</span>
+        <div>
+          <div style="font-size:.9rem;font-weight:800;color:var(--text);">AI Translator <span style="font-size:.7rem;padding:2px 7px;border-radius:8px;background:#10b98120;color:#10b981;border:1px solid #10b98140;margin-left:4px;font-weight:700;">DNA</span></div>
+          <div style="font-size:.68rem;color:var(--text-muted);">Builds File DNA · 5 Translation Variants · Professional Quality</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="AITranslator.openSettings()" title="Translator Settings" style="width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;">⚙</button>
+        <button onclick="AITranslator.close()" style="width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;font-size:1rem;">×</button>
+      </div>
+    </div>
+
+    <!-- DNA Status Bar -->
+    <div id="ait-dna-bar" style="padding:8px 20px;background:rgba(16,185,129,.06);border-bottom:1px solid rgba(16,185,129,.15);display:flex;align-items:center;gap:10px;flex-shrink:0;flex-wrap:wrap;">
+      <span style="font-size:.65rem;font-weight:800;color:#10b981;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;">🧬 File DNA</span>
+      <span id="ait-dna-domain" style="font-size:.68rem;padding:1px 8px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);">Domain: —</span>
+      <span id="ait-dna-register" style="font-size:.68rem;padding:1px 8px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);">Register: —</span>
+      <span id="ait-dna-terms" style="font-size:.68rem;padding:1px 8px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);">Terms: 0</span>
+      <span id="ait-dna-status" style="font-size:.68rem;color:var(--text-muted);margin-left:auto;font-style:italic;">No DNA built yet</span>
+      <button id="ait-dna-btn" onclick="AITranslator.buildDNA()" style="font-size:.68rem;padding:3px 10px;border-radius:6px;border:1px solid #10b981;background:#10b98118;color:#10b981;cursor:pointer;font-weight:700;">⚡ Build DNA</button>
+    </div>
+
+    <!-- Body: Source + Results -->
+    <div style="display:flex;flex:1;overflow:hidden;">
+
+      <!-- Left: Input -->
+      <div style="width:320px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden;">
+        <div style="padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;">Source Text</div>
+        <div style="flex:1;overflow-y:auto;padding:14px;">
+          <textarea id="ait-source" rows="8"
+            style="width:100%;border:1px solid var(--border);outline:none;background:var(--bg);border-radius:8px;color:var(--text);font-size:.88rem;padding:10px 12px;resize:vertical;line-height:1.7;box-sizing:border-box;"
+            onfocus="this.style.borderColor='#10b981'" onblur="this.style.borderColor='var(--border)'"
+            placeholder="Paste English source text here…
+
+Tip: Use 'Build DNA' first on your full file for better results."></textarea>
+          <button onclick="AITranslator.fillFromEditor()" style="margin-top:6px;width:100%;padding:5px;font-size:.72rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text-dim);cursor:pointer;">← From Editor Selection</button>
+        </div>
+        <!-- Settings Panel (hidden by default) -->
+        <div id="ait-settings-panel" style="display:none;padding:12px 14px;border-top:1px solid var(--border);background:var(--surface2);flex-shrink:0;">
+          <div style="font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">⚙ Translator Settings</div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div>
+              <div style="font-size:.68rem;color:var(--text-muted);margin-bottom:3px;">Source Language</div>
+              <select id="ait-src-lang" style="width:100%;font-size:.74rem;padding:5px 8px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);outline:none;">
+                <option value="en">English</option><option value="fr">French</option><option value="de">German</option><option value="es">Spanish</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:.68rem;color:var(--text-muted);margin-bottom:3px;">Target Language</div>
+              <select id="ait-tgt-lang" style="width:100%;font-size:.74rem;padding:5px 8px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);outline:none;">
+                <option value="ar">Arabic (Generic)</option><option value="ar-SA">Arabic (Saudi Arabia)</option><option value="ar-EG">Arabic (Egypt)</option><option value="ar-AE">Arabic (UAE)</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:.68rem;color:var(--text-muted);margin-bottom:3px;">Register Override</div>
+              <select id="ait-register" style="width:100%;font-size:.74rem;padding:5px 8px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);outline:none;">
+                <option value="auto">Auto (from DNA)</option><option value="formal">Formal / MSA</option><option value="semi-formal">Semi-Formal</option><option value="technical">Technical</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:.68rem;color:var(--text-muted);margin-bottom:3px;">Custom Instructions</div>
+              <textarea id="ait-custom-inst" rows="2" style="width:100%;font-size:.72rem;padding:5px 7px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);outline:none;resize:none;" placeholder="e.g. Use formal Saudi Arabic. Preserve brand names…"></textarea>
+            </div>
+          </div>
+        </div>
+        <!-- Run button -->
+        <div style="padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0;">
+          <button onclick="AITranslator.translate()" id="ait-run-btn" style="width:100%;padding:10px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:8px;font-weight:800;cursor:pointer;font-size:.85rem;">🧬 Translate with DNA</button>
+        </div>
+      </div>
+
+      <!-- Right: 5 variants -->
+      <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+        <div style="padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface2);font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;">Translation Variants</div>
+        <div id="ait-results" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;">
+          <!-- Empty state -->
+          <div id="ait-empty" style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+            <div style="font-size:2rem;margin-bottom:10px;opacity:.3;">🧬</div>
+            <div style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:6px;">DNA-Powered Translation</div>
+            <div style="font-size:.76rem;max-width:260px;margin:0 auto;line-height:1.6;">Build DNA from your file, then paste source text and click Translate to get 5 professional variants.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOOL SETTINGS MODAL ══ -->
+<div id="tool-settings-modal" style="display:none;position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,.5);">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(520px,94vw);max-height:80vh;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--surface2);border-bottom:1px solid var(--border);">
+      <div style="font-size:.88rem;font-weight:800;color:var(--text);">⚙ <span id="tool-settings-title">Tool Settings</span></div>
+      <button onclick="document.getElementById('tool-settings-modal').style.display='none'" style="width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;">×</button>
+    </div>
+    <div id="tool-settings-body" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;"></div>
+    <div style="padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;">
+      <button onclick="document.getElementById('tool-settings-modal').style.display='none'" style="padding:6px 16px;border:1px solid var(--border);background:transparent;border-radius:6px;color:var(--text-dim);cursor:pointer;font-size:.78rem;">Cancel</button>
+      <button onclick="ToolSettings.save()" style="padding:6px 16px;background:var(--accent);border:none;border-radius:6px;color:#fff;cursor:pointer;font-size:.78rem;font-weight:700;">Save</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ SCRIPTS ══════════════ -->
 <script src="js/config.js"></script>
 <script src="js/supabase-client.js"></script>
