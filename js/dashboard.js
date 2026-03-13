@@ -6,6 +6,8 @@ window.Dashboard = {
   _projects: [],
   _storageKey: 'lm_projects',
 
+  _esc(s) { return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); },
+
   init() {
     try {
       this._projects = JSON.parse(localStorage.getItem(this._storageKey) || '[]');
@@ -53,9 +55,9 @@ window.Dashboard = {
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;
                   display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;">
         <div>
-          <div style="font-weight:700;font-size:.88rem;color:var(--text);">${p.name}</div>
+          <div style="font-weight:700;font-size:.88rem;color:var(--text);">${this._esc(p.name)}</div>
           <div style="font-size:.72rem;color:var(--text-muted);margin-top:2px;">
-            ${p.client ? p.client + ' · ' : ''}${p.srcLang} → ${p.tgtLang} · ${p.domain}
+            ${p.client ? this._esc(p.client) + ' · ' : ''}${this._esc(p.srcLang)} → ${this._esc(p.tgtLang)} · ${this._esc(p.domain)}
           </div>
         </div>
         <div style="display:flex;gap:6px;">

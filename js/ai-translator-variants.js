@@ -183,16 +183,16 @@ Replace [TERMS] with actual terminology from the DNA context when available. Rep
   function _parseVariants(raw) {
     if (!raw) throw new Error('Empty AI response');
 
-    // Extract JSON from response
-    const match = raw.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error('No JSON in AI response');
+    // Use shared extractJSON utility if available (defined in config.js)
+    const data = typeof extractJSON === 'function'
+      ? extractJSON(raw)
+      : (() => {
+          const m = raw.match(/\{[\s\S]*\}/);
+          if (!m) return null;
+          try { return JSON.parse(m[0]); } catch { return null; }
+        })();
 
-    let data;
-    try {
-      data = JSON.parse(match[0]);
-    } catch (e) {
-      throw new Error('Could not parse AI response as JSON: ' + e.message);
-    }
+    if (!data) throw new Error('No valid JSON in AI response');
 
     // Validate expected keys
     const required = ['direct', 'refined', 'transcreated', 'paraphrased', 'final'];

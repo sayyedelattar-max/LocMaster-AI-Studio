@@ -223,13 +223,10 @@ Respond ONLY in JSON:
   },
 
   _parseJSON(raw) {
-    try {
-      const m = (raw || '').match(/\{[\s\S]*\}/);
-      if (!m) return { score: 0, issues: [] };
-      return JSON.parse(m[0]);
-    } catch {
-      return { score: 0, issues: [] };
-    }
+    const result = typeof extractJSON === 'function'
+      ? extractJSON(raw)
+      : (() => { try { const m=(raw||'').match(/\{[\s\S]*\}/); return m?JSON.parse(m[0]):null; } catch{ return null; } })();
+    return result || { score: 0, issues: [] };
   },
 
   _getFirstProvider() {

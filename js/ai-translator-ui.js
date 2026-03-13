@@ -191,9 +191,10 @@
                 maxTokens:   1500,
                 temperature: 0.1,
               });
-              const m = raw.match(/\{[\s\S]*\}/);
-              if (m) {
-                const aiDna = JSON.parse(m[0]);
+              const aiDna = typeof extractJSON === 'function'
+                ? extractJSON(raw)
+                : (() => { const m=raw.match(/\{[\s\S]*\}/); return m?JSON.parse(m[0]):null; })();
+              if (aiDna) {
                 // Merge: prefer AI results but keep local recurring terms
                 dna = Object.assign({}, dna, aiDna, {
                   recurringTerms: aiDna.recurringTerms?.length
@@ -253,9 +254,10 @@
             const raw    = await AIClient.call(prompt, 'aitranslator', {
               maxTokens: 3000, temperature: 0.35,
             });
-            const m = raw.match(/\{[\s\S]*\}/);
-            if (!m) throw new Error('No JSON in response');
-            data = JSON.parse(m[0]);
+            data = typeof extractJSON === 'function'
+              ? extractJSON(raw)
+              : (() => { const m=raw.match(/\{[\s\S]*\}/); return m?JSON.parse(m[0]):null; })();
+            if (!data) throw new Error('No JSON in response');
           }
 
           _renderVariants(data);
@@ -265,9 +267,11 @@
           AppState.notify('Translation error: ' + err.message, 'error');
           const wrap = $id('ait-results')?.querySelector('.ait-variants-wrap');
           if (wrap) {
-            wrap.innerHTML = `<div style="padding:20px;color:#ef4444;font-size:.8rem;">
-              ❌ Error: ${err.message}
-            </div>`;
+            const errDiv = document.createElement('div');
+            errDiv.style.cssText = 'padding:20px;color:#ef4444;font-size:.8rem;';
+            errDiv.textContent = '❌ Error: ' + err.message;
+            wrap.innerHTML = '';
+            wrap.appendChild(errDiv);
           }
         } finally {
           this._state.isTranslating = false;

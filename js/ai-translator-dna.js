@@ -103,6 +103,9 @@ window.AITranslatorDNA = (() => {
     return labelMap[best[0]] || 'General';
   }
 
+  // ── Pattern constant ──────────────────────────────────────────────────────
+  const CAPITALIZED_TERM_RE = /\b[A-Z][a-zA-Z]{2,}\b/g;
+
   // ── Public: Build terminology dictionary from bilingual segments ───────────
   function extractTerminology(segments) {
     const termMap = {};
@@ -111,7 +114,7 @@ window.AITranslatorDNA = (() => {
       if (!seg.source || !seg.target) return;
 
       // Extract capitalized terms (proper nouns / key terms)
-      const srcTerms = seg.source.match(/\b[A-Z][a-zA-Z]{2,}\b/g) || [];
+      const srcTerms = seg.source.match(CAPITALIZED_TERM_RE) || [];
       srcTerms.forEach(term => {
         if (!termMap[term]) {
           termMap[term] = { src: term, tgt: '', count: 0, segIds: [] };
@@ -124,7 +127,7 @@ window.AITranslatorDNA = (() => {
     // Attempt to find Arabic translations by co-occurrence
     segments.forEach(seg => {
       if (!seg.source || !seg.target) return;
-      const srcTerms = (seg.source.match(/\b[A-Z][a-zA-Z]{2,}\b/g) || []);
+      const srcTerms = seg.source.match(CAPITALIZED_TERM_RE) || [];
       srcTerms.forEach(term => {
         if (termMap[term] && !termMap[term].tgt) {
           // Look for Arabic words in target that appear only in segs containing this term

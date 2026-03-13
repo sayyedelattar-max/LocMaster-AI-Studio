@@ -5,6 +5,8 @@
 window.UsersManager = {
   _storageKey: 'lm_users',
 
+  _esc(s) { return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); },
+
   getAllUsers() {
     try { return JSON.parse(localStorage.getItem(this._storageKey) || '[]'); } catch { return []; }
   },
@@ -34,8 +36,8 @@ window.UsersManager = {
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
                   background:var(--surface);border:1px solid var(--border);border-radius:7px;margin-bottom:6px;">
         <div>
-          <div style="font-weight:600;font-size:.84rem;">${u.name || u.email}</div>
-          <div style="font-size:.7rem;color:var(--text-muted);">${u.email} · ${u.role || 'viewer'}</div>
+          <div style="font-weight:600;font-size:.84rem;">${this._esc(u.name || u.email)}</div>
+          <div style="font-size:.7rem;color:var(--text-muted);">${this._esc(u.email)} · ${this._esc(u.role || 'viewer')}</div>
         </div>
         <button onclick="UsersManager.removeUser(${u.id});UsersManager.render();"
                 style="font-size:.7rem;padding:2px 8px;border-radius:5px;cursor:pointer;

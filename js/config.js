@@ -127,6 +127,19 @@ function getCurrentTheme() {
   return localStorage.getItem('lm_theme') || 'dark';
 }
 
+/**
+ * Extract and parse the first JSON object from an AI response string.
+ * Shared utility to avoid duplication across ai-client.js, ai-translator-ui.js, etc.
+ * @param {string} raw - Raw AI response text
+ * @returns {object|null} Parsed JSON object or null
+ */
+function extractJSON(raw) {
+  if (!raw) return null;
+  const m = raw.match(/\{[\s\S]*\}/);
+  if (!m) return null;
+  try { return JSON.parse(m[0]); } catch { return null; }
+}
+
 function applyTheme(name) {
   const theme = LMConfig.themes[name] || LMConfig.themes.dark;
   const root  = document.documentElement;
