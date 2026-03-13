@@ -15,7 +15,7 @@ window.QA = (function () {
       check: (s) => {
         const srcNums = (s.source || '').match(/\d+(?:[.,]\d+)*/g) || [];
         const tgtNums = (s.target || '').match(/\d+(?:[.,]\d+)*/g) || [];
-        return srcNums.sort().join(',') !== tgtNums.sort().join(',') && srcNums.length > 0;
+        return srcNums.slice().sort((a,b)=>parseFloat(a)-parseFloat(b)).join(',') !== tgtNums.slice().sort((a,b)=>parseFloat(a)-parseFloat(b)).join(',') && srcNums.length > 0;
       },
       severity: 'major',
     },

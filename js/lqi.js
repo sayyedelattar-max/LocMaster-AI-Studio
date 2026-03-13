@@ -151,7 +151,7 @@ ${sample}`;
         { id:'2', source:'Please review the attached document carefully.', target:'يرجى مراجعة المستند المرفق بعناية', matchType:'fuzzy', matchPercent:85, status:'translated', _file:'demo.sdlxliff' },
         { id:'3', source:'Contact our support team for assistance.', target:'اتصل بفريق الدعم لدينا للحصول على المساعدة', matchType:'new', matchPercent:0, status:'new', _file:'demo.sdlxliff' },
         { id:'4', source:'Version 2.0 released on 01/15/2025.', target:'الإصدار 2.0 صدر في 15/01/2025.', matchType:'fuzzy', matchPercent:78, status:'translated', _file:'demo.sdlxliff' },
-        { id:'5', source:'All rights reserved.', target:'All rights reserved.', matchType:'ice', matchPercent:101, status:'reviewed', locked:true, _file:'demo.sdlxliff' },
+        { id:'5', source:'All rights reserved.', target:'جميع الحقوق محفوظة.', matchType:'ice', matchPercent:101, status:'reviewed', locked:true, _file:'demo.sdlxliff' },
       ];
       updateStats();
       renderPreview();

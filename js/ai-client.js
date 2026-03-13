@@ -102,8 +102,10 @@ window.AIClient = (function () {
           const data = await res.json();
           if (res.ok) return extractText(provider, data);
           lastError = data.error?.message || `HTTP ${res.status}`;
-          // Only retry on model-not-found type errors
-          if (!lastError.includes('not found') && !lastError.includes('not supported') && !lastError.includes('deprecated')) break;
+          // Retry on 404 (model not found) or explicit not-found/not-supported messages
+          const retryOnStatus = res.status === 404;
+          const retryOnMessage = lastError.includes('not found') || lastError.includes('not supported') || lastError.includes('deprecated');
+          if (!retryOnStatus && !retryOnMessage) break;
         } catch (fetchErr) {
           lastError = fetchErr.message;
           break;

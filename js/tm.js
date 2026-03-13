@@ -5,6 +5,7 @@
 window.TM = (function () {
 
   let _entries = [];
+  let _idCounter = 1;
 
   // ── Fuzzy match ────────────────────────────────────────────────
   function levenshtein(a, b) {
@@ -49,7 +50,7 @@ window.TM = (function () {
         existing.tgt  = tgt;
         existing.used = (existing.used || 0) + 1;
       } else {
-        _entries.push({ id: Date.now() + Math.random(), src: src.trim(), tgt: tgt.trim(), ...meta, used: 0, date: new Date().toISOString() });
+        _entries.push({ id: 'tm_' + (_idCounter++), src: src.trim(), tgt: tgt.trim(), ...meta, used: 0, date: new Date().toISOString() });
       }
       this.save();
     },

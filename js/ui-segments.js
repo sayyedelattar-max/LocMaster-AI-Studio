@@ -121,10 +121,12 @@ window.UISegments = (function () {
       const panel = document.getElementById('editor-panel');
       if (!panel || !seg) return;
       const tmMatches = TM.lookup(seg.source, 70).slice(0, 5);
+      // Store matches as data attribute on panel to avoid XSS in onclick
+      panel._tmMatches = tmMatches;
       const tmHtml = tmMatches.length
-        ? tmMatches.map(m => `<div style="padding:8px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="UISegments.applyTM('${seg.id}','${m.tgt.replace(/'/g,"\\'")}')">
+        ? tmMatches.map((m, idx) => `<div style="padding:8px;border-bottom:1px solid var(--border);cursor:pointer;" data-tm-idx="${idx}" data-seg-id="${escHtml(String(seg.id))}" onclick="UISegments.applyTMByIndex(this)">
             <div style="font-size:.65rem;font-family:var(--mono);color:var(--accent);margin-bottom:2px;">${m.pct}%</div>
-            <div style="font-size:.8rem;direction:rtl;color:var(--text);">${m.tgt.substring(0,120)}</div>
+            <div style="font-size:.8rem;direction:rtl;color:var(--text);">${escHtml(m.tgt.substring(0,120))}</div>
           </div>`).join('')
         : '<div style="padding:12px;font-size:.74rem;color:var(--text-muted);text-align:center;">No TM matches</div>';
       panel.innerHTML = `
@@ -140,6 +142,15 @@ window.UISegments = (function () {
             <button onclick="UISegments.flagSegment('${seg.id}')" style="padding:4px 10px;font-size:.7rem;background:var(--surface2);border:1px solid var(--border);border-radius:5px;cursor:pointer;color:var(--warning);">⚑ Flag</button>
           </div>
         </div>`;
+    },
+
+    applyTMByIndex(el) {
+      const panel = document.getElementById('editor-panel');
+      const idx   = parseInt(el.getAttribute('data-tm-idx'), 10);
+      const segId = el.getAttribute('data-seg-id');
+      const matches = panel?._tmMatches;
+      if (!matches || isNaN(idx) || !matches[idx]) return;
+      this.applyTM(segId, matches[idx].tgt);
     },
 
     applyTM(segId, tgt) {

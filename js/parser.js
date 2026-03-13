@@ -23,7 +23,7 @@ window.Parser = (function () {
     if (ext === 'txlf')     return 'txlf';
     if (ext === 'tmx')      return 'tmx';
     if (ext === 'xlf' || ext === 'xliff') return 'xliff';
-    if (content.includes('sdl.com'))  return 'sdlxliff';
+    if (content.includes('xmlns:sdl=') || content.includes('sdl.com/FileTypes'))  return 'sdlxliff';
     if (content.includes('MQXliff')) return 'mqxliff';
     return 'xliff';
   }
