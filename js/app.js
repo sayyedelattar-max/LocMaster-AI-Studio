@@ -1256,7 +1256,7 @@ async function handlePackageUpload(files) {
     // parsed may contain multiple underlying files
     if (parsed.packageType === 'ReturnPackage' && AppState.parsedData && AppState.parsedData.packageType === 'ProjectPackage') {
       // merge returned segments into original
-      const updates = 0;
+      let updates = 0;
       parsed.segments.forEach(s => {
         const orig = AppState.segments.find(o => o.id === s.id);
         if (orig && s.target && s.target !== orig.target) {
