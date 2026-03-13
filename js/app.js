@@ -1159,7 +1159,6 @@ function toggleTheme(){
 async function doLogin() {
   const email = document.getElementById('auth-email').value;
   const pass  = document.getElementById('auth-password').value;
-  console.log('doLogin called', email);
   const btn   = document.getElementById('auth-btn');
   const errEl = document.getElementById('auth-error');
   btn.textContent = '⏳ Signing in…';
