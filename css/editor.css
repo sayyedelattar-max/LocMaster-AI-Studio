@@ -1,0 +1,220 @@
+/* ══════════════════════════════════════════════════════════════
+   css/editor.css  — LocMaster AI Studio — Translation Editor
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Editor layout ───────────────────────────────────────────── */
+#view-editor {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* ── Ribbon ──────────────────────────────────────────────────── */
+.ribbon {
+  flex-shrink: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.ribbon-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.ribbon-tab {
+  padding: 6px 14px;
+  font-size: .76rem;
+  font-weight: 600;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: all var(--transition);
+}
+.ribbon-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(56,189,248,.06);
+}
+.ribbon-panel { padding: 8px 14px; display: none; }
+.ribbon-panel:not(.hidden) { display: block; }
+.ribbon-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 10px;
+  border-right: 1px solid var(--border);
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.ribbon-group:last-child { border-right: none; }
+.ribbon-group-label {
+  display: block;
+  font-size: .58rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding-top: 2px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.toolbar-btn-label { font-size: .6rem; color: var(--text-muted); line-height: 1.1; max-width: 44px; text-align: center; }
+
+/* ── Editor body ─────────────────────────────────────────────── */
+.editor-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Segments area */
+.editor-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Segments header row */
+.seg-header {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr 80px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  flex-shrink: 0;
+}
+.seg-header-cell {
+  padding: 6px 12px;
+  font-size: .65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  border-right: 1px solid var(--border);
+}
+.seg-header-cell:last-child { border-right: none; }
+
+/* Segments scroll container */
+#segments-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#segments-container:empty::after {
+  content: 'No segments match the current filters.';
+  display: block;
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: .82rem;
+}
+
+/* ── Editor right panel ──────────────────────────────────────── */
+.editor-panel {
+  width: 220px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--border);
+  background: var(--surface);
+  overflow-y: auto;
+}
+
+/* ── Batch tasks dropdown ────────────────────────────────────── */
+.batch-dropdown { position: relative; }
+.batch-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 500;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  min-width: 200px;
+  padding: 4px 0;
+}
+.batch-menu.show { display: block; }
+.batch-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  font-size: .78rem;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.batch-menu button:hover { background: var(--surface2); color: var(--text); }
+.batch-menu-sep {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+/* ── Find & Replace bar ──────────────────────────────────────── */
+#find-replace-bar {
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.fr-input {
+  padding: 5px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: .78rem;
+  outline: none;
+  transition: border-color var(--transition);
+  min-width: 140px;
+}
+.fr-input:focus { border-color: var(--accent); }
+
+/* ── Editor empty state ──────────────────────────────────────── */
+.editor-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+}
+.editor-empty-icon { font-size: 3rem; opacity: .3; }
+.editor-empty h2 { font-size: 1rem; font-weight: 700; color: var(--text); }
+.editor-empty p { font-size: .8rem; max-width: 320px; line-height: 1.6; }
+.editor-empty-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+/* ── AI Assistant panel ──────────────────────────────────────── */
+.ai-assist-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: rgba(56,189,248,.1);
+  border: 1px solid rgba(56,189,248,.25);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-size: .76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.ai-assist-btn:hover { background: rgba(56,189,248,.18); }
+
+/* ── DNA button pulse ────────────────────────────────────────── */
+@keyframes dna-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+}
+.dna-btn-active { animation: dna-pulse 2s infinite; }
